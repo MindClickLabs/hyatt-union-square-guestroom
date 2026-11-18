@@ -166,7 +166,7 @@ td.pend{color:var(--muted);font-style:italic;}
 .rx-tie{display:inline-block;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 6px;font-size:9.5px;letter-spacing:.03em;margin-left:4px;vertical-align:1px;}
 .rx-tag.t-N{background:var(--none);color:#3a473f;}
 .rx-tag.t-P{background:#fff;color:var(--coral);border:1px solid var(--coral);}
-.rx-oh,.rx-o{display:grid;grid-template-columns:20px minmax(0,1.4fr) minmax(0,1fr) 110px 64px 86px;gap:10px;align-items:center;}
+.rx-oh,.rx-o{display:grid;grid-template-columns:20px minmax(0,1.4fr) minmax(0,1fr) 110px 86px;gap:10px;align-items:center;}
 .rx-oh{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:0 10px 4px;}
 .rx-oh span:last-child,.rx-imp{text-align:right;}
 .rx-o{border:1px solid var(--line);border-radius:9px;padding:7px 10px;margin-top:5px;background:#fff;cursor:pointer;}
@@ -1034,16 +1034,16 @@ td.pend{color:var(--muted);font-style:italic;}
       document.getElementById('rx-nsum').innerHTML='No recommendations made <span>'+R.norec.length+' items · '+nNo+' SKUs · '+f0(aNo)+' sq ft</span>';
       document.querySelector('#rx-norec tbody').innerHTML=R.norec.map(function(z){return '<tr><td>'+esc(z.title)+(z.skus.length?'<details class="rx-skus rx-skn"><summary>SKUs ('+z.skus.length+')</summary><div>'+z.skus.map(function(s){return '<span><b>'+esc(s)+'</b></span>';}).join('')+'</div></details>':'')+'</td><td class="tcat">'+esc(z.cat)+'</td><td class="tcat">'+esc(z.space)+'</td><td class="num">'+(z.area?f0(z.area):'—')+'</td></tr>';}).join('');
 
-      function itemRows(it){var v=sv(it), A=R.base[v].area;
-        var opts='<label class="rx-o none"><input type="radio" name="rx-'+it.id+'" value="0"><span class="rx-ov"><b>Current spec</b><span class="rx-fam">'+esc(it.cur)+' · unrated · 0 in the score</span></span><span></span><span></span><span></span><span></span></label>'
+function itemRows(it){var v=sv(it), A=R.base[v].area;
+        var opts='<label class="rx-o none"><input type="radio" name="rx-'+it.id+'" value="0"><span class="rx-ov"><b>Current spec</b><span class="rx-fam">'+esc(it.cur)+' · unrated · 0 in the score</span></span><span></span><span></span><span></span></label>'
           +it.opts.map(function(o){
             return '<label class="rx-o"><input type="radio" name="rx-'+it.id+'" value="'+o.k+'"><span class="rx-ov"><span class="rx-k">'+olab(o)+(o.opt===1?' <span class="rx-mc">Mindclick Rec</span>':'')+(tie(it,o)?' <span class="rx-tie">tied score</span>':'')+'</span><b>'+esc(o.v)+'</b>'+(o.part?'<span class="rx-pr">Only '+f0(o.ra)+' of '+f0(it.area)+' sq ft is rated</span>':'')+'</span>'
-              +'<span class="rx-icons">'+icons(o)+'<span class="rx-cnt">'+o.icons.length+'/'+R.order.length+'</span></span><span>'+tag(o)+'</span><span class="rx-price"'+(o.price?' title="'+esc(o.pricebasis)+'"':'')+'>'+(o.price?esc(o.price):'—')+'</span>'
+              +'<span class="rx-icons">'+icons(o)+'<span class="rx-cnt">'+o.icons.length+'/'+R.order.length+'</span></span><span>'+tag(o)+'</span>'
               +'<span class="rx-imp">'+(o.pending?'—':sgn(o.pts/A,1))+'</span></label>';}).join('');
         return '<tr class="rx-row" data-id="'+it.id+'"><td><button type="button" class="rx-btn" aria-expanded="false">'+CHV+'<span><b>'+esc(it.title)+'</b><span class="rx-meta">'+(it.ptype?'<span class="rx-ptag" title="'+(it.ptype==='ABP'?'Architectural building product':'Furniture, fixtures &amp; equipment')+'">'+esc(it.ptype)+'</span>':'')+esc(it.cat)+' · '+f0(it.area)+' sq ft · '+it.n+' SKU'+(it.n>1?'s':'')+'</span></span></button></td>'
           +'<td class="rx-selv"></td><td class="rx-selt"></td><td class="num rx-seli"></td></tr>'
           +'<tr class="rx-sub" data-id="'+it.id+'" hidden><td colspan="4"><details class="rx-skus"><summary>SKUs ('+it.n+')</summary><div>'+it.skus.map(function(s){return '<span><b>'+esc(s[0])+'</b> '+esc(s[1])+'</span>';}).join('')+'</div></details>'
-          +'<div class="rx-oh"><span></span><span>Vendor option</span><span>Sustainability wins</span><span>Tier · score</span><span>Price tier</span><span>Score impact</span></div>'+opts+'</td></tr>';}
+          +'<div class="rx-oh"><span></span><span>Vendor option</span><span>Sustainability wins</span><span>Tier · score</span><span>Score impact</span></div>'+opts+'</td></tr>';}
       var box=document.getElementById('rx-spaces');
       box.innerHTML=SP.map(function(v){var its=items.filter(function(i){return sv(i)===v;});
         if(!its.length)return '';

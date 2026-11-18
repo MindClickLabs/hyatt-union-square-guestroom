@@ -1123,7 +1123,7 @@ td.pend{color:var(--muted);font-style:italic;}
         function row(lab,f,cls,ic){return '<tr'+(cls?' class="'+cls+'"':'')+'><th class="rx-cl">'+(ic?'<img class="rx-ic" src="'+ic+'" alt="">':'')+'<span>'+lab+'</span></th>'+O.map(function(o){return '<td class="'+(o.k===k?'on':'')+'">'+f(o)+'</td>';}).join('')+'</tr>';}
         h+=row('Factory known',function(o){return o.cmp.fac?'<span class="rx-yes">&#10003; Yes</span>':cv('Factory Data Needed');});
         h+=row('Overall score',function(o){return tag(o);},'rx-crow-sc');
-        h+=row('Relative price tier',function(o){return o.price?'<b class="rx-pt">'+esc(o.price)+'</b><span class="rx-cert">'+esc(o.pricebasis)+'</span>':'<span class="rx-weak">— not enough priced history</span>';});
+        
         h+=row('Sustainability wins',function(o){return '<span class="rx-icons">'+icons(o)+'<span class="rx-cnt">'+o.icons.length+'/'+R.order.length+'</span></span>';});
         var lastG='';
         R.cmp_rows.forEach(function(c){if(c.g!==lastG){lastG=c.g;h+='<tr class="rx-cg"><th colspan="'+(O.length+1)+'"><img class="rx-ic" src="'+R.icons[c.g]+'" alt=""><span>'+esc(R.labels[c.g])+'</span></th></tr>';}

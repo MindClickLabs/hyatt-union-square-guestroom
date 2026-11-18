@@ -1115,21 +1115,21 @@ function itemRows(it){var v=sv(it), A=R.base[v].area;
       var WEAK=/^(no |not |none|don't know|has not|no$)|not existent|no data|not rated|not graded|not currently|no policy|no ems|no sustainable|not reported|has been requested|factory data needed|assessing|r&d/i;
       function cv(t){return '<span class="'+(WEAK.test(t)?'rx-weak':'')+'">'+esc(t)+'</span>';}
       function nchem(f){var s=new Set();f.forEach(function(x){var i=x.lastIndexOf(': ');(i>-1?x.slice(i+2):x).split(',').forEach(function(c){c=c.trim();if(c)s.add(c.toLowerCase());});});return s.size;}
-      function renderCmp(){
+function renderCmp(){
         var it=items.find(function(i){return i.id===csel.value;})||items[0]; if(!it)return;
         document.getElementById('rx-cmp-meta').textContent=it.cat+' · '+R.views[sv(it)]+' · '+f0(it.area)+' sq ft · '+it.n+' SKU'+(it.n>1?'s':'');
-        var O=it.opts, k=sel[it.id]||0;
-        var h='<thead><tr><th class="rx-cl"></th>'+O.map(function(o){return '<th class="rx-cv'+(o.k===k?' on':'')+'"><span class="rx-k">'+olab(o)+(o.opt===1?' <span class="rx-mc">Mindclick Rec</span>':'')+'</span><b>'+esc(o.v)+'</b></th>';}).join('')+'</tr></thead><tbody>';
+        var curOpt={k:0,v:it.cur,cur:true,icons:[],cmp:{fac:false,v:{},free:[]}};
+        var O=[curOpt].concat(it.opts), k=sel[it.id]||0;
+        var h='<thead><tr><th class="rx-cl"></th>'+O.map(function(o){return '<th class="rx-cv'+(o.k===k?' on':'')+'"><span class="rx-k">'+(o.cur?'Current spec':olab(o)+(o.opt===1?' <span class="rx-mc">Mindclick Rec</span>':''))+'</span><b>'+esc(o.v)+'</b></th>';}).join('')+'</tr></thead><tbody>';
         function row(lab,f,cls,ic){return '<tr'+(cls?' class="'+cls+'"':'')+'><th class="rx-cl">'+(ic?'<img class="rx-ic" src="'+ic+'" alt="">':'')+'<span>'+lab+'</span></th>'+O.map(function(o){return '<td class="'+(o.k===k?'on':'')+'">'+f(o)+'</td>';}).join('')+'</tr>';}
-        h+=row('Factory known',function(o){return o.cmp.fac?'<span class="rx-yes">&#10003; Yes</span>':cv('Factory Data Needed');});
-        h+=row('Overall score',function(o){return tag(o);},'rx-crow-sc');
-        
-        h+=row('Sustainability wins',function(o){return '<span class="rx-icons">'+icons(o)+'<span class="rx-cnt">'+o.icons.length+'/'+R.order.length+'</span></span>';});
+        h+=row('Factory known',function(o){return o.cur?cv('No data'):(o.cmp.fac?'<span class="rx-yes">&#10003; Yes</span>':cv('Factory Data Needed'));});
+        h+=row('Overall score',function(o){return o.cur?'<span class="rx-tag t-N">Not rated</span>':tag(o);},'rx-crow-sc');
+        h+=row('Sustainability wins',function(o){return o.cur?cv('No data'):'<span class="rx-icons">'+icons(o)+'<span class="rx-cnt">'+o.icons.length+'/'+R.order.length+'</span></span>';});
         var lastG='';
-        R.cmp_rows.forEach(function(c){if(c.g!==lastG){lastG=c.g;h+='<tr class="rx-cg"><th colspan="'+(O.length+1)+'"><img class="rx-ic" src="'+R.icons[c.g]+'" alt=""><span>'+esc(R.labels[c.g])+'</span></th></tr>';}
-          h+=row(esc(c.l),function(o){var t=o.cmp.v[c.k].split(' | ').map(cv).join('<br>');
-          if(c.k==='chem'){var f=o.cmp.v.free||[];t+=f.length?'<details class="rx-free"><summary>Free-of list ('+nchem(f)+' chemical'+(nchem(f)===1?'':'s')+')</summary><ul>'+f.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></details>':'<span class="rx-cert">No free-of list reported</span>';}
-          return t;},'',null);});
+        R.cmp_rows.forEach(function(c){if(c.g!==lastG){lastG=c.g;h+='<tr class="rx-cg"><th colspan="'+(O.length+1)+'"><img class="rx-ic" src="'+R.icons[c.g]+'" alt=""><span>'+R.labels[c.g]+'</span></th></tr>';}
+          h+=row(esc(c.l),function(o){if(o.cur)return cv('No data');var t=o.cmp.v[c.k].split(' | ').map(cv).join('<br>');
+            if(c.k==='chem'){var f=o.cmp.free||[];t+=f.length?'<details class="rx-free"><summary>Free-of list ('+nchem(f)+' chemical'+(nchem(f)===1?'':'s')+')</summary><ul>'+f.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></details>':'';}
+            return t;},'',null);});
         h+=row('In your scenario',function(o){return o.k===k?'<span class="rx-chosen">&#10003; Selected</span>':'<button type="button" class="rx-pick" data-k="'+o.k+'">Select</button>';},'rx-crow-act');
         ctbl.innerHTML=h+'</tbody>';
         ctbl.dataset.id=it.id;}
